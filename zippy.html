@@ -16,7 +16,6 @@
     color: #fff;
   }
 
-  /* ── BACKGROUND VIDEO ── */
   #video-background {
     position: fixed; inset: 0; z-index: 0;
     width: 100%; height: 100%;
@@ -25,20 +24,18 @@
     pointer-events: none;
   }
 
-  /* ── OVERLAY ── */
   #overlay {
     position: fixed; inset: 0; z-index: 1;
     background: radial-gradient(ellipse at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.55) 100%);
     pointer-events: none;
   }
 
-  /* ── RAIN ── */
   #rain-canvas {
     position: fixed; inset: 0; z-index: 2;
     pointer-events: none;
   }
 
-  /* ── PRELOAD ── */
+  /* PRELOAD */
   #preload-screen {
     position: fixed; inset: 0; z-index: 500;
     background: #000;
@@ -59,7 +56,7 @@
   }
   @keyframes pulse { 0%,100%{opacity:.3} 50%{opacity:1} }
 
-  /* ── BIO PAGE ── */
+  /* BIO PAGE */
   #bio-page {
     position: fixed; inset: 0; z-index: 60;
     display: none;
@@ -70,50 +67,49 @@
   }
   #bio-page.visible { display: flex; }
 
-  /* ── AK GUNS ── */
+  /* AK GUNS — sitting near bottom, partially visible */
   #ak-container {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+    bottom: 0; left: 0;
+    width: 100%; height: 100%;
     z-index: 50;
     pointer-events: none;
     display: none;
   }
-  #ak-container.visible { display: flex; }
+  #ak-container.visible { display: block; }
 
   #ak-left {
     position: absolute;
-    bottom: 0;
-    left: -80px;
-    width: 300px;
-    transform: rotate(42deg);
+    bottom: -30px;
+    left: -20px;
+    width: 220px;
+    transform: rotate(38deg);
     transform-origin: bottom left;
   }
   #ak-right {
     position: absolute;
-    bottom: 0;
-    right: -80px;
-    width: 300px;
-    transform: rotate(-42deg);
+    bottom: -30px;
+    right: -20px;
+    width: 220px;
+    transform: rotate(-38deg);
     transform-origin: bottom right;
   }
-  #ak-left img.ak-img { width: 300px; height: auto; transform: scaleX(-1); }
-  #ak-right img.ak-img { width: 300px; height: auto; }
+  #ak-left img.ak-img  { width: 220px; height: auto; transform: scaleX(-1); display: block; }
+  #ak-right img.ak-img { width: 220px; height: auto; display: block; }
 
   #flash-left, #flash-right {
     position: absolute;
-    top: 10px;
-    width: 80px;
+    top: 8px;
+    width: 60px;
     height: auto;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.06s;
   }
-  #flash-left { left: -10px; transform: scaleX(-1); }
-  #flash-right { right: -10px; }
+  #flash-left  { left: -5px;  transform: scaleX(-1); }
+  #flash-right { right: -5px; }
 
-  /* ── CARD ── */
+  /* CARD */
   #bio-content {
     width: 100%;
     max-width: 480px;
@@ -127,74 +123,79 @@
     z-index: 60;
   }
 
-  /* ── BANNER ── */
+  /* BANNER — customizable via inline style or CSS var */
   .bio-banner-background {
     width: 100%;
-    min-height: 90px;
-    background-image: url('https://drift.rip/media/users/banners/banner_2530_6a31d0e7dad4e3.73295956.webp');
+    height: 120px;
+    background-image: var(--banner-url, url('https://i.imgur.com/lBMRQsl.png'));
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    border-radius: 0.375rem;
-    padding: 20px;
-    display: flex;
-    align-items: flex-start;
+    border-radius: 6px 6px 0 0;
     position: relative;
-    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-end;
+    padding: 12px 16px;
+    gap: 12px;
   }
 
-  /* ── AVATAR ── */
+  /* AVATAR inside banner */
   .avatars-uwu {
     position: relative;
-    width: 80px; height: 80px;
+    width: 64px; height: 64px;
     flex-shrink: 0;
+    margin-bottom: -8px;
   }
   .avatars-uwu img.avatar-img {
-    width: 80px; height: 80px;
+    width: 64px; height: 64px;
     border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.3);
     object-fit: cover;
     display: block;
   }
   .avatars-uwu img.avatar-frame {
     position: absolute;
     top: 0; left: 0;
-    width: 80px; height: 80px;
+    width: 64px; height: 64px;
     transform: scale(1.2);
     pointer-events: none;
   }
 
-  /* ── PROFILE INFO ── */
-  #main-profile-content {
-    padding: 8px 24px 20px;
-  }
-
-  .profile-header {
+  /* USERNAME inside banner */
+  .banner-name-wrap {
     display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    margin-bottom: 10px;
+    align-items: center;
+    margin-bottom: 2px;
   }
-
   #bio-username {
     font-size: 1.5rem;
-    font-weight: 600;
+    font-weight: 700;
     background: linear-gradient(to right, #0f0f0f 0%, #8b5cf6 50%, #0f0f0f 70%);
     background-size: 200%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: shine 3s linear infinite;
     display: inline-block;
+    text-shadow: none;
+    filter: drop-shadow(0 1px 4px rgba(0,0,0,0.8));
   }
   @keyframes shine { 0%{background-position:0%} 100%{background-position:200%} }
 
-  /* ── MUSIC MARQUEE ── */
+  /* PROFILE CONTENT below banner */
+  #main-profile-content {
+    padding: 10px 16px 18px;
+  }
+
+  /* MUSIC MARQUEE */
   .music-bar {
     display: flex;
     align-items: center;
-    padding: 12px 16px;
+    padding: 10px 4px;
     gap: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: 10px;
   }
-  .music-icon { font-size: 1.1rem; flex-shrink: 0; }
+  .music-icon { font-size: 1rem; flex-shrink: 0; }
   .marquee-track {
     overflow: hidden;
     flex: 1;
@@ -205,30 +206,28 @@
     display: inline-flex;
     white-space: nowrap;
     gap: 10px;
-    font-size: 0.85rem;
-    color: #fff;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.8);
     animation: marquee 12s linear infinite;
     min-width: max-content;
   }
   @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
-  /* ── CARDS SECTION ── */
+  /* CARDS SECTION */
   #profile-cards-section {
     display: grid;
     grid-template-columns: 1fr;
     gap: 6px;
-    margin-bottom: 12px;
   }
-  @media (min-width: 500px) {
+  @media (min-width: 440px) {
     #profile-cards-section { grid-template-columns: 1fr 1fr; }
   }
 
-  /* ── MODULE CARDS ── */
   .module-card {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 14px;
+    padding: 9px 12px;
     border-radius: 50px;
     background: rgba(255,255,255,0.08);
     border: 1px solid rgba(255,255,255,0.06);
@@ -244,15 +243,15 @@
     transform: translateX(3px);
   }
   .module-card-icon {
-    width: 44px; height: 44px;
+    width: 40px; height: 40px;
     border-radius: 50%;
     background: rgba(255,255,255,0.1);
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
   .module-card-icon img {
-    width: 44px; height: 44px;
+    width: 40px; height: 40px;
     border-radius: 50%;
     object-fit: cover;
   }
@@ -260,19 +259,19 @@
   .module-titleText {
     color: #fff;
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: 0.83rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 140px;
+    max-width: 130px;
   }
   .module-labelText {
-    color: rgba(255,255,255,0.6);
-    font-size: 0.72rem;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.7rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 140px;
+    max-width: 130px;
   }
 
   .hdn {
@@ -284,14 +283,32 @@
 </head>
 <body>
 
-<!-- BACKGROUND VIDEO -->
+<!-- ═══ CUSTOMIZE THESE ═══════════════════════════════════════════
+  BACKGROUND VIDEO : replace src below
+  AUDIO            : replace src below
+  BANNER IMAGE     : replace --banner-url value in the style tag below
+  AVATAR IMAGE     : replace src on the avatar-img
+  USERNAME         : change text inside #bio-username
+  MUSIC TEXT       : change the <span> text in .marquee
+  CARDS            : add/edit .module-card links
+════════════════════════════════════════════════════════════════ -->
+
+<style>
+  /* ★ CHANGE YOUR BANNER HERE */
+  .bio-banner-background {
+    --banner-url: url('https://i.imgur.com/lBMRQsl.png');
+    background-image: var(--banner-url);
+  }
+</style>
+
+<!-- BACKGROUND VIDEO — change this src -->
 <video id="video-background" autoplay muted playsinline loop>
   <source src="ADD_YOUR_VIDEO_URL.mp4" type="video/mp4">
 </video>
 <div id="overlay"></div>
 <canvas id="rain-canvas"></canvas>
 
-<!-- AUDIO -->
+<!-- AUDIO — change this src -->
 <audio id="background-audio" loop preload="none">
   <source src="ADD_YOUR_AUDIO_URL.mp3" type="audio/mpeg">
 </audio>
@@ -317,21 +334,27 @@
 <div id="bio-page">
   <div id="bio-content">
 
-    <!-- Banner + Avatar -->
+    <!-- BANNER with avatar + name inside -->
     <div class="bio-banner-background">
+      <!-- ★ CHANGE YOUR AVATAR HERE -->
       <div class="avatars-uwu">
-        <img class="avatar-img" src="/media/users/avatars/avatar_2530_6a31d1febcaa31.98103322.webp"
+        <img class="avatar-img"
+          src="ADD_YOUR_AVATAR_URL"
           onerror="this.src='https://i.imgur.com/lBMRQsl.png'" alt="avatar">
+        <!-- remove the line below if you don't want an avatar frame -->
         <img class="avatar-frame" src="https://drift.rip/media/content/decorations/drifter.webp"
           onerror="this.style.display='none'" alt="">
       </div>
+      <!-- ★ CHANGE YOUR NAME HERE -->
+      <div class="banner-name-wrap">
+        <h2 id="bio-username">Frosty</h2>
+      </div>
     </div>
 
-    <!-- Profile Info -->
+    <!-- CONTENT BELOW BANNER -->
     <div id="main-profile-content">
-      <h2 id="bio-username">Frosty</h2>
 
-      <!-- Music marquee -->
+      <!-- ★ CHANGE MUSIC TEXT HERE -->
       <div class="music-bar">
         <span class="music-icon">🎵</span>
         <div class="marquee-track">
@@ -350,11 +373,27 @@
         </div>
       </div>
 
-      <!-- Cards -->
+      <!-- ★ ADD / EDIT YOUR CARDS HERE -->
       <div id="profile-cards-section">
-        <!-- Add your cards here -->
-      </div>
 
+        <!-- Example card — copy and paste to add more -->
+        <a class="module-card" href="#" target="_blank">
+          <div class="module-card-icon">💬</div>
+          <div class="module-card-info">
+            <span class="module-titleText">Discord</span>
+            <span class="module-labelText">your username</span>
+          </div>
+        </a>
+
+        <a class="module-card" href="#" target="_blank">
+          <div class="module-card-icon">🎮</div>
+          <div class="module-card-info">
+            <span class="module-titleText">Roblox</span>
+            <span class="module-labelText">your username</span>
+          </div>
+        </a>
+
+      </div>
     </div>
   </div>
 </div>
@@ -364,43 +403,26 @@
 const canvas = document.getElementById('rain-canvas');
 const ctx = canvas.getContext('2d');
 let drops = [];
-
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
+function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
-
 function initDrops() {
   drops = [];
-  for (let i = 0; i < 120; i++) {
-    drops.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      length: Math.random() * 18 + 8,
-      speed: Math.random() * 3 + 2,
-      opacity: Math.random() * 0.1 + 0.03
-    });
-  }
+  for (let i = 0; i < 120; i++) drops.push({
+    x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+    length: Math.random() * 18 + 8, speed: Math.random() * 3 + 2,
+    opacity: Math.random() * 0.1 + 0.03
+  });
 }
 initDrops();
-
 function drawRain() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drops.forEach(d => {
-    ctx.beginPath();
-    ctx.moveTo(d.x, d.y);
+    ctx.beginPath(); ctx.moveTo(d.x, d.y);
     ctx.lineTo(d.x - d.length * 0.2, d.y + d.length);
-    ctx.strokeStyle = `rgba(180,200,255,${d.opacity})`;
-    ctx.lineWidth = 0.8;
-    ctx.stroke();
-    d.y += d.speed;
-    d.x -= d.speed * 0.2;
-    if (d.y > canvas.height || d.x < 0) {
-      d.y = -d.length;
-      d.x = Math.random() * canvas.width;
-    }
+    ctx.strokeStyle = `rgba(180,200,255,${d.opacity})`; ctx.lineWidth = 0.8; ctx.stroke();
+    d.y += d.speed; d.x -= d.speed * 0.2;
+    if (d.y > canvas.height || d.x < 0) { d.y = -d.length; d.x = Math.random() * canvas.width; }
   });
   requestAnimationFrame(drawRain);
 }
@@ -412,23 +434,17 @@ function fireGuns() {
   const flashR = document.getElementById('flash-right');
   const akL = document.getElementById('ak-left');
   const akR = document.getElementById('ak-right');
-
   function shoot() {
-    flashL.style.opacity = 1;
-    flashR.style.opacity = 1;
+    flashL.style.opacity = 1; flashR.style.opacity = 1;
     akL.style.filter = 'drop-shadow(0 0 12px orange)';
     akR.style.filter = 'drop-shadow(0 0 12px orange)';
     setTimeout(() => {
-      flashL.style.opacity = 0;
-      flashR.style.opacity = 0;
-      akL.style.filter = '';
-      akR.style.filter = '';
+      flashL.style.opacity = 0; flashR.style.opacity = 0;
+      akL.style.filter = ''; akR.style.filter = '';
     }, 80);
   }
-
   function scheduleNext() {
-    const delay = Math.random() * 400 + 200;
-    setTimeout(() => { shoot(); scheduleNext(); }, delay);
+    setTimeout(() => { shoot(); scheduleNext(); }, Math.random() * 400 + 200);
   }
   scheduleNext();
 }
@@ -454,9 +470,7 @@ function generateZalgoTitle() {
 function enterSite() {
   const pre = document.getElementById('preload-screen');
   pre.classList.add('fade-out');
-  bgm.load();
-  bgm.volume = 0.8;
-  bgm.play().catch(() => {});
+  bgm.load(); bgm.volume = 0.8; bgm.play().catch(() => {});
   setTimeout(() => {
     pre.style.display = 'none';
     document.getElementById('bio-page').classList.add('visible');
@@ -465,10 +479,7 @@ function enterSite() {
     generateZalgoTitle();
   }, 800);
 }
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Enter') enterSite();
-});
+document.addEventListener('keydown', e => { if (e.key === 'Enter') enterSite(); });
 </script>
 </body>
 </html>
