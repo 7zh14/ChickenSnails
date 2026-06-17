@@ -363,7 +363,7 @@ function drawRain() {
     ctx.beginPath();
     ctx.moveTo(d.x, d.y);
     ctx.lineTo(d.x - d.length * 0.2, d.y + d.length);
-    ctx.strokeStyle = `rgba(180,200,255,${d.opacity * rainIntensity})`;
+    ctx.strokeStyle = `rgba(180,200,255,${d.opacity * rainIntensity * 0.3})`;
     ctx.lineWidth = 0.8;
     ctx.stroke();
     d.y += d.speed * rainIntensity;
