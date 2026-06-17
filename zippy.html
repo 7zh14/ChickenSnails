@@ -426,11 +426,15 @@ function toggleMute() {
 function enterSite() {
   const pre = document.getElementById('preload');
   pre.classList.add('fade-out');
+
+  // load and play immediately on click
+  bgm.load();
+  bgm.volume = 0.8;
+  bgm.play();
+
   setTimeout(() => {
     pre.style.display = 'none';
     document.getElementById('bio-page').classList.add('visible');
-    // try play audio
-    bgm.play().catch(() => {});
     fireGuns();
   }, 800);
 }
