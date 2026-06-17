@@ -4,15 +4,42 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>drift.rip | @zippy</title>
+<script>
+// ============================================================
+//  ★★★  CUSTOMIZE EVERYTHING HERE  ★★★
+// ============================================================
+
+const CONFIG = {
+  username:   "Frosty",
+  music:      "Californication - Juice Wrld",
+
+  // Direct links (must end in .mp4, .mp3, .jpg, .png, .webp etc.)
+  videoURL:   "https://files.catbox.moe/6s44m9.mp4",
+  audioURL:   "https://files.catbox.moe/ikf5re.mp3",
+  avatarURL:  "https://files.catbox.moe/0put6n.webp",
+  bannerURL:  "https://drift.rip/media/users/banners/banner_2530_6a31d0e7dad4e3.73295956.webp",
+
+  // Username gradient colors
+  color1: "#0f0f0f",
+  color2: "#8b5cf6",
+
+  // Cards — add as many as you want
+  cards: [
+    { icon: "💬", title: "Discord",  label: "youruser#0000", url: "#" },
+    { icon: "🎮", title: "Roblox",   label: "youruser",      url: "#" },
+    { icon: "🔗", title: "About me", label: "linksta.cc/@u", url: "#" },
+  ]
+};
+
+// ============================================================
+</script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
     background: #000;
     font-family: 'Segoe UI', sans-serif;
     overflow: hidden;
-    height: 100vh;
-    width: 100vw;
+    height: 100vh; width: 100vw;
     color: #fff;
   }
 
@@ -23,13 +50,11 @@
     filter: brightness(0.45);
     pointer-events: none;
   }
-
   #overlay {
     position: fixed; inset: 0; z-index: 1;
-    background: radial-gradient(ellipse at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.55) 100%);
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%);
     pointer-events: none;
   }
-
   #rain-canvas {
     position: fixed; inset: 0; z-index: 2;
     pointer-events: none;
@@ -39,447 +64,311 @@
   #preload-screen {
     position: fixed; inset: 0; z-index: 500;
     background: #000;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     cursor: pointer;
     transition: opacity 0.8s ease;
   }
   #preload-screen.fade-out { opacity: 0; pointer-events: none; }
   #bio-startText {
-    color: #fff;
-    font-size: 1.2rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
+    color: #fff; font-size: 1.2rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
     animation: pulse 1.8s ease-in-out infinite;
   }
   @keyframes pulse { 0%,100%{opacity:.3} 50%{opacity:1} }
 
-  /* BIO PAGE */
+  /* BIO PAGE wrapper */
   #bio-page {
     position: fixed; inset: 0; z-index: 60;
     display: none;
-    align-items: center;
-    justify-content: center;
-    overflow-y: auto;
+    align-items: center; justify-content: center;
     padding: 20px;
   }
   #bio-page.visible { display: flex; }
 
-  /* AK GUNS — sitting near bottom, partially visible */
-  #ak-container {
-    position: fixed;
-    bottom: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 50;
-    pointer-events: none;
-    display: none;
-  }
-  #ak-container.visible { display: block; }
-
-  #ak-left {
-    position: absolute;
-    bottom: -30px;
-    left: -20px;
-    width: 220px;
-    transform: rotate(38deg);
-    transform-origin: bottom left;
-  }
-  #ak-right {
-    position: absolute;
-    bottom: -30px;
-    right: -20px;
-    width: 220px;
-    transform: rotate(-38deg);
-    transform-origin: bottom right;
-  }
-  #ak-left img.ak-img  { width: 220px; height: auto; transform: scaleX(-1); display: block; }
-  #ak-right img.ak-img { width: 220px; height: auto; display: block; }
-
-  #flash-left, #flash-right {
-    position: absolute;
-    top: 8px;
-    width: 60px;
-    height: auto;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.06s;
-  }
-  #flash-left  { left: -5px;  transform: scaleX(-1); }
-  #flash-right { right: -5px; }
-
   /* CARD */
   #bio-content {
-    width: 100%;
-    max-width: 480px;
+    width: 100%; max-width: 480px;
     border-radius: 8px;
     background: rgba(255,255,255,0.06);
     border: 1px solid rgba(255,255,255,0.08);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    overflow: hidden;
+    overflow: visible; /* let AKs overflow */
     position: relative;
     z-index: 60;
   }
 
-  /* BANNER — customizable via inline style or CSS var */
-  .bio-banner-background {
+  /* BANNER */
+  #banner {
     width: 100%;
     height: 120px;
-    background-image: var(--banner-url, url('https://i.imgur.com/lBMRQsl.png'));
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     border-radius: 6px 6px 0 0;
-    position: relative;
+    overflow: hidden;
     display: flex;
-    align-items: flex-end;
-    padding: 12px 16px;
+    align-items: center;
+    padding: 14px;
     gap: 12px;
   }
-
-  /* AVATAR inside banner */
-  .avatars-uwu {
-    position: relative;
-    width: 64px; height: 64px;
-    flex-shrink: 0;
-    margin-bottom: -8px;
-  }
-  .avatars-uwu img.avatar-img {
-    width: 64px; height: 64px;
+  /* AVATAR */
+  #avatar {
+    width: 72px; height: 72px;
     border-radius: 50%;
     border: 2px solid rgba(255,255,255,0.3);
     object-fit: cover;
-    display: block;
+    flex-shrink: 0;
   }
-  .avatars-uwu img.avatar-frame {
-    position: absolute;
-    top: 0; left: 0;
-    width: 64px; height: 64px;
-    transform: scale(1.2);
-    pointer-events: none;
-  }
-
-  /* USERNAME inside banner */
-  .banner-name-wrap {
-    display: flex;
-    align-items: center;
-    margin-bottom: 2px;
-  }
+  /* USERNAME in banner */
   #bio-username {
-    font-size: 1.5rem;
-    font-weight: 700;
-    background: linear-gradient(to right, #0f0f0f 0%, #8b5cf6 50%, #0f0f0f 70%);
+    font-size: 1.5rem; font-weight: 700;
     background-size: 200%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: shine 3s linear infinite;
     display: inline-block;
     text-shadow: none;
-    filter: drop-shadow(0 1px 4px rgba(0,0,0,0.8));
   }
   @keyframes shine { 0%{background-position:0%} 100%{background-position:200%} }
 
-  /* PROFILE CONTENT below banner */
-  #main-profile-content {
-    padding: 10px 16px 18px;
-  }
-
-  /* MUSIC MARQUEE */
+  /* MUSIC BAR */
   .music-bar {
-    display: flex;
-    align-items: center;
-    padding: 10px 4px;
-    gap: 8px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    margin-bottom: 10px;
+    display: flex; align-items: center;
+    padding: 10px 14px; gap: 8px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
   }
-  .music-icon { font-size: 1rem; flex-shrink: 0; }
   .marquee-track {
-    overflow: hidden;
-    flex: 1;
+    overflow: hidden; flex: 1;
     mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
     -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
   }
   .marquee {
-    display: inline-flex;
-    white-space: nowrap;
-    gap: 10px;
-    font-size: 0.82rem;
-    color: rgba(255,255,255,0.8);
+    display: inline-flex; white-space: nowrap; gap: 10px;
+    font-size: 0.82rem; color: rgba(255,255,255,0.8);
     animation: marquee 12s linear infinite;
     min-width: max-content;
   }
   @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
-  /* CARDS SECTION */
+  /* CARDS */
   #profile-cards-section {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 6px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 6px; padding: 12px 14px 14px;
   }
-  @media (min-width: 440px) {
-    #profile-cards-section { grid-template-columns: 1fr 1fr; }
-  }
-
   .module-card {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 12px;
-    border-radius: 50px;
+    display: flex; align-items: center; gap: 9px;
+    padding: 9px 12px; border-radius: 50px;
     background: rgba(255,255,255,0.08);
     border: 1px solid rgba(255,255,255,0.06);
-    color: #fff;
-    text-decoration: none;
+    color: #fff; text-decoration: none;
     font-size: 0.82rem;
     transition: background 0.2s, transform 0.15s;
-    cursor: pointer;
-    width: 100%;
   }
-  .module-card:hover {
-    background: rgba(255,255,255,0.14);
-    transform: translateX(3px);
-  }
+  .module-card:hover { background: rgba(255,255,255,0.14); transform: translateX(3px); }
   .module-card-icon {
-    width: 40px; height: 40px;
-    border-radius: 50%;
+    width: 38px; height: 38px; border-radius: 50%;
     background: rgba(255,255,255,0.1);
     display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    font-size: 1rem;
-  }
-  .module-card-icon img {
-    width: 40px; height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
+    flex-shrink: 0; font-size: 1rem;
   }
   .module-card-info { display: flex; flex-direction: column; min-width: 0; }
   .module-titleText {
-    color: #fff;
-    font-weight: 600;
-    font-size: 0.83rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 130px;
+    color: #fff; font-weight: 600; font-size: 0.83rem;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px;
   }
   .module-labelText {
-    color: rgba(255,255,255,0.5);
-    font-size: 0.7rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 130px;
+    color: rgba(255,255,255,0.5); font-size: 0.7rem;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px;
   }
 
-  .hdn {
-    position: absolute; width: 1px; height: 1px;
-    padding: 0; margin: -1px; overflow: hidden;
-    clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  /* AK GUNS — anchored to bottom of card */
+  #ak-container {
+    position: absolute;
+    bottom: -10px;   /* just below the card bottom edge */
+    left: 0; width: 100%;
+    pointer-events: none;
+    display: none;
+    z-index: 70;
   }
+  #ak-container.visible { display: block; }
+
+  #ak-left {
+    position: absolute;
+    bottom: 0;
+    left: -90px;
+    width: 200px;
+    transform: rotate(40deg);
+    transform-origin: bottom left;
+  }
+  #ak-right {
+    position: absolute;
+    bottom: 0;
+    right: -90px;
+    width: 200px;
+    transform: rotate(-40deg);
+    transform-origin: bottom right;
+  }
+  #ak-left  img.ak-img { width: 200px; height: auto; transform: scaleX(-1); display: block; }
+  #ak-right img.ak-img { width: 200px; height: auto; display: block; }
+
+  #flash-left, #flash-right {
+    position: absolute; top: 6px;
+    width: 55px; height: auto;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.06s;
+  }
+  #flash-left  { left: -4px;  transform: scaleX(-1); }
+  #flash-right { right: -4px; }
 </style>
 </head>
 <body>
 
-<!-- ═══ CUSTOMIZE THESE ═══════════════════════════════════════════
-  BACKGROUND VIDEO : replace src below
-  AUDIO            : replace src below
-  BANNER IMAGE     : replace --banner-url value in the style tag below
-  AVATAR IMAGE     : replace src on the avatar-img
-  USERNAME         : change text inside #bio-username
-  MUSIC TEXT       : change the <span> text in .marquee
-  CARDS            : add/edit .module-card links
-════════════════════════════════════════════════════════════════ -->
-
-<style>
-  /* ★ CHANGE YOUR BANNER HERE */
-  .bio-banner-background {
-    --banner-url: url('https://i.imgur.com/lBMRQsl.png');
-    background-image: var(--banner-url);
-  }
-</style>
-
-<!-- BACKGROUND VIDEO — change this src -->
-<video id="video-background" autoplay muted playsinline loop>
-  <source src="ADD_YOUR_VIDEO_URL.mp4" type="video/mp4">
-</video>
+<video id="video-background" autoplay muted playsinline loop></video>
 <div id="overlay"></div>
 <canvas id="rain-canvas"></canvas>
-
-<!-- AUDIO — change this src -->
-<audio id="background-audio" loop preload="none">
-  <source src="ADD_YOUR_AUDIO_URL.mp3" type="audio/mpeg">
-</audio>
+<audio id="background-audio" loop preload="none"></audio>
 
 <!-- PRELOAD -->
 <div id="preload-screen" onclick="enterSite()">
   <div id="bio-startText">Click to enter!</div>
 </div>
 
-<!-- AK GUNS -->
-<div id="ak-container">
-  <div id="ak-left">
-    <img class="ak-img" src="https://i.imgur.com/ot9Titb.png" alt="AK-47">
-    <img id="flash-left" src="https://i.imgur.com/YCy6LgZ.png" alt="">
-  </div>
-  <div id="ak-right">
-    <img class="ak-img" src="https://i.imgur.com/ot9Titb.png" alt="AK-47">
-    <img id="flash-right" src="https://i.imgur.com/YCy6LgZ.png" alt="">
-  </div>
-</div>
-
 <!-- BIO PAGE -->
 <div id="bio-page">
   <div id="bio-content">
 
-    <!-- BANNER with avatar + name inside -->
-    <div class="bio-banner-background">
-      <!-- ★ CHANGE YOUR AVATAR HERE -->
-      <div class="avatars-uwu">
-        <img class="avatar-img"
-          src="ADD_YOUR_AVATAR_URL"
-          onerror="this.src='https://i.imgur.com/lBMRQsl.png'" alt="avatar">
-        <!-- remove the line below if you don't want an avatar frame -->
-        <img class="avatar-frame" src="https://drift.rip/media/content/decorations/drifter.webp"
-          onerror="this.style.display='none'" alt="">
+    <!-- AKs anchored to card bottom -->
+    <div id="ak-container">
+      <div id="ak-left">
+        <img class="ak-img" src="https://i.imgur.com/ot9Titb.png" alt="AK">
+        <img id="flash-left" src="https://i.imgur.com/YCy6LgZ.png" alt="">
       </div>
-      <!-- ★ CHANGE YOUR NAME HERE -->
-      <div class="banner-name-wrap">
-        <h2 id="bio-username">Frosty</h2>
+      <div id="ak-right">
+        <img class="ak-img" src="https://i.imgur.com/ot9Titb.png" alt="AK">
+        <img id="flash-right" src="https://i.imgur.com/YCy6LgZ.png" alt="">
       </div>
     </div>
 
-    <!-- CONTENT BELOW BANNER -->
-    <div id="main-profile-content">
+    <!-- BANNER -->
+    <div id="banner">
+      <img id="avatar" src="" onerror="this.src='https://i.imgur.com/lBMRQsl.png'" alt="avatar">
+      <h2 id="bio-username"></h2>
+    </div>
 
-      <!-- ★ CHANGE MUSIC TEXT HERE -->
-      <div class="music-bar">
-        <span class="music-icon">🎵</span>
-        <div class="marquee-track">
-          <div class="marquee">
-            <span>Californication - Juice Wrld</span>
-            <span>·</span>
-            <span>Californication - Juice Wrld</span>
-            <span>·</span>
-            <span>Californication - Juice Wrld</span>
-            <span>·</span>
-            <span>Californication - Juice Wrld</span>
-            <span>·</span>
-            <span>Californication - Juice Wrld</span>
-            <span>·</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- ★ ADD / EDIT YOUR CARDS HERE -->
-      <div id="profile-cards-section">
-
-        <!-- Example card — copy and paste to add more -->
-        <a class="module-card" href="#" target="_blank">
-          <div class="module-card-icon">💬</div>
-          <div class="module-card-info">
-            <span class="module-titleText">Discord</span>
-            <span class="module-labelText">your username</span>
-          </div>
-        </a>
-
-        <a class="module-card" href="#" target="_blank">
-          <div class="module-card-icon">🎮</div>
-          <div class="module-card-info">
-            <span class="module-titleText">Roblox</span>
-            <span class="module-labelText">your username</span>
-          </div>
-        </a>
-
+    <!-- MUSIC -->
+    <div class="music-bar">
+      <span>🎵</span>
+      <div class="marquee-track">
+        <div class="marquee" id="marquee-inner"></div>
       </div>
     </div>
+
+    <!-- CARDS -->
+    <div id="profile-cards-section"></div>
+
   </div>
 </div>
 
 <script>
+// ── APPLY CONFIG ──
+document.getElementById('video-background').innerHTML =
+  `<source src="${CONFIG.videoURL}" type="video/mp4">`;
+document.getElementById('background-audio').innerHTML =
+  `<source src="${CONFIG.audioURL}" type="audio/mpeg">`;
+document.getElementById('avatar').src = CONFIG.avatarURL;
+document.getElementById('banner').style.backgroundImage = `url('${CONFIG.bannerURL}')`;
+
+const userEl = document.getElementById('bio-username');
+userEl.textContent = CONFIG.username;
+userEl.style.backgroundImage = `linear-gradient(to right, ${CONFIG.color1} 0%, ${CONFIG.color2} 50%, ${CONFIG.color1} 70%)`;
+
+// music marquee — repeat text so it loops seamlessly
+const marquee = document.getElementById('marquee-inner');
+const musicRepeat = Array(8).fill(`<span>${CONFIG.music}</span><span>·</span>`).join('');
+marquee.innerHTML = musicRepeat;
+
+// cards
+const cardsEl = document.getElementById('profile-cards-section');
+CONFIG.cards.forEach(c => {
+  cardsEl.innerHTML += `
+    <a class="module-card" href="${c.url}" target="_blank">
+      <div class="module-card-icon">${c.icon}</div>
+      <div class="module-card-info">
+        <span class="module-titleText">${c.title}</span>
+        <span class="module-labelText">${c.label}</span>
+      </div>
+    </a>`;
+});
+
 // ── RAIN ──
 const canvas = document.getElementById('rain-canvas');
 const ctx = canvas.getContext('2d');
 let drops = [];
 function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
+resizeCanvas(); window.addEventListener('resize', resizeCanvas);
 function initDrops() {
   drops = [];
   for (let i = 0; i < 120; i++) drops.push({
-    x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-    length: Math.random() * 18 + 8, speed: Math.random() * 3 + 2,
-    opacity: Math.random() * 0.1 + 0.03
+    x: Math.random()*canvas.width, y: Math.random()*canvas.height,
+    length: Math.random()*18+8, speed: Math.random()*3+2,
+    opacity: Math.random()*0.1+0.03
   });
 }
 initDrops();
 function drawRain() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
   drops.forEach(d => {
-    ctx.beginPath(); ctx.moveTo(d.x, d.y);
-    ctx.lineTo(d.x - d.length * 0.2, d.y + d.length);
-    ctx.strokeStyle = `rgba(180,200,255,${d.opacity})`; ctx.lineWidth = 0.8; ctx.stroke();
-    d.y += d.speed; d.x -= d.speed * 0.2;
-    if (d.y > canvas.height || d.x < 0) { d.y = -d.length; d.x = Math.random() * canvas.width; }
+    ctx.beginPath(); ctx.moveTo(d.x,d.y);
+    ctx.lineTo(d.x-d.length*0.2, d.y+d.length);
+    ctx.strokeStyle=`rgba(180,200,255,${d.opacity})`; ctx.lineWidth=0.8; ctx.stroke();
+    d.y+=d.speed; d.x-=d.speed*0.2;
+    if(d.y>canvas.height||d.x<0){d.y=-d.length;d.x=Math.random()*canvas.width;}
   });
   requestAnimationFrame(drawRain);
 }
 drawRain();
 
-// ── GUN FIRE ──
+// ── GUNS ──
 function fireGuns() {
-  const flashL = document.getElementById('flash-left');
-  const flashR = document.getElementById('flash-right');
-  const akL = document.getElementById('ak-left');
-  const akR = document.getElementById('ak-right');
+  const fL=document.getElementById('flash-left'), fR=document.getElementById('flash-right');
+  const aL=document.getElementById('ak-left'),    aR=document.getElementById('ak-right');
   function shoot() {
-    flashL.style.opacity = 1; flashR.style.opacity = 1;
-    akL.style.filter = 'drop-shadow(0 0 12px orange)';
-    akR.style.filter = 'drop-shadow(0 0 12px orange)';
-    setTimeout(() => {
-      flashL.style.opacity = 0; flashR.style.opacity = 0;
-      akL.style.filter = ''; akR.style.filter = '';
-    }, 80);
+    fL.style.opacity=fR.style.opacity=1;
+    aL.style.filter=aR.style.filter='drop-shadow(0 0 12px orange)';
+    setTimeout(()=>{ fL.style.opacity=fR.style.opacity=0; aL.style.filter=aR.style.filter=''; },80);
   }
-  function scheduleNext() {
-    setTimeout(() => { shoot(); scheduleNext(); }, Math.random() * 400 + 200);
-  }
-  scheduleNext();
+  function next() { setTimeout(()=>{shoot();next();}, Math.random()*400+200); }
+  next();
 }
 
-// ── AUDIO ──
-const bgm = document.getElementById('background-audio');
-
 // ── ZALGO TITLE ──
-const originalTitle = document.title;
-const zalgoChars = ['̒','̏','̓','̔','̄','̅','̋','̍','̎','̐','̑','̒','̀','́','͂','̓','̈́','ͅ','͆','͇','͈','͉','͊','͋'];
-function generateZalgoTitle() {
-  let t = '';
-  for (let i = 0; i < originalTitle.length; i++) {
-    t += originalTitle[i];
-    const n = Math.floor(Math.random() * 5);
-    for (let j = 0; j < n; j++) t += zalgoChars[Math.floor(Math.random() * zalgoChars.length)];
+const origTitle = document.title;
+const zc=['̒','̏','̓','̔','̄','̅','̋','̍','̎','̐','̑','̒','̀','́','͂','̓','̈́','ͅ','͆','͇','͈','͉','͊','͋'];
+function zalgo() {
+  let t='';
+  for(let i=0;i<origTitle.length;i++){
+    t+=origTitle[i];
+    const n=Math.floor(Math.random()*5);
+    for(let j=0;j<n;j++) t+=zc[Math.floor(Math.random()*zc.length)];
   }
-  document.title = t;
-  setTimeout(generateZalgoTitle, 100);
+  document.title=t; setTimeout(zalgo,100);
 }
 
 // ── ENTER ──
+const bgm = document.getElementById('background-audio');
 function enterSite() {
-  const pre = document.getElementById('preload-screen');
-  pre.classList.add('fade-out');
-  bgm.load(); bgm.volume = 0.8; bgm.play().catch(() => {});
-  setTimeout(() => {
-    pre.style.display = 'none';
+  document.getElementById('preload-screen').classList.add('fade-out');
+  bgm.load(); bgm.volume=0.8; bgm.play().catch(()=>{});
+  setTimeout(()=>{
+    document.getElementById('preload-screen').style.display='none';
     document.getElementById('bio-page').classList.add('visible');
     document.getElementById('ak-container').classList.add('visible');
-    fireGuns();
-    generateZalgoTitle();
+    fireGuns(); zalgo();
   }, 800);
 }
-document.addEventListener('keydown', e => { if (e.key === 'Enter') enterSite(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Enter') enterSite(); });
 </script>
 </body>
 </html>
